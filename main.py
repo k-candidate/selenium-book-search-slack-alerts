@@ -84,7 +84,7 @@ def main():
   service = Service(executable_path=chromedriver_path)
 
   options = Options()
-  # Uncomment to keep browser open for debugging
+  # Uncomment to keep browser open for local debugging
   # options.add_experimental_option("detach", True)
   options.add_argument("--headless=new")
   options.add_argument("--window-size=1920,1080")
@@ -94,8 +94,10 @@ def main():
 
   wait = WebDriverWait(driver, 60)
 
-  for book in book_list:
+  for index, book in enumerate(book_list, start=1):
     try:
+      print(f"Book #{index} - Processing...")
+
       # Re-locate search bar before each search to avoid selenium.common.exceptions.StaleElementReferenceException
       search_bar = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "div.panel-busqueda input#buscar")))
       safe_clear_element(driver, search_bar)
@@ -110,25 +112,29 @@ def main():
 
       products = driver.find_elements(By.CSS_SELECTOR, "div.producto")
       if products:
-        msg = f"'{book}' - Book is available!"
-        print(msg)
+        msg = f"#{index} '{book}' - Book is available!"
+        anon_msg = f"Book #{index} - Book is available!"
+        print(anon_msg)
         send_slack_message(slack_webhook_url, msg)
       else:
         no_results = driver.find_elements(By.CSS_SELECTOR, "span.sin-resultados-busqueda-avanzada")
         if no_results:
-          print(f"'{book}' - No results found.")
+          print(f"Book #{index} - No results found.")
         else:
-          msg = f"'{book}' - Search results unavailable or page structure changed."
-          print(msg)
+          msg = f"#{index} '{book}' - Search results unavailable or page structure changed."
+          anon_msg = f"Book #{index} - Search results unavailable or page structure changed."
+          print(anon_msg)
           send_slack_message(slack_webhook_url, msg)
 
     except TimeoutException:
-      error_msg = f"'{book}' - Timed out waiting for search results to load."
-      print(error_msg)
+      error_msg = f"#{index} '{book}' - Timed out waiting for search results to load."
+      anon_error_msg = f"Book #{index} - Timed out waiting for search results to load."
+      print(anon_error_msg)
       send_slack_message(slack_webhook_url, error_msg)
     except StaleElementReferenceException:
-      error_msg = f"'{book}' - Stale element reference exception on input or results."
-      print(error_msg)
+      error_msg = f"#{index} '{book}' - Stale element reference exception on input or results."
+      anon_error_msg = f"Book #{index} - Stale element reference exception on input or results."
+      print(anon_error_msg)
       send_slack_message(slack_webhook_url, error_msg)
 
     # Delay between searches to reduce load on server, and avoid blocks or rate-limiting

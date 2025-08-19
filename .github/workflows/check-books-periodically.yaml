@@ -2,7 +2,7 @@ name: Check Books Availability and Notify via Slack
 
 on:
   schedule:
-    - cron: "0 6 * * *"  # Runs every hour
+    - cron: "0 6 * * *"  # Runs every day at 6:00am
   workflow_dispatch:
 
 env:
@@ -34,4 +34,4 @@ jobs:
 
     - name: Run Book Search Script
       run: |
-        python main.py --slack-webhook-url "$SLACK_WEBHOOK_URL" --website-url "$WEBSITE_URL"
+        python main.py --book-list "$BOOK_LIST" --slack-webhook-url "$SLACK_WEBHOOK_URL" --website-url "$WEBSITE_URL"
