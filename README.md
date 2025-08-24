@@ -5,6 +5,7 @@ Automated script to search for books on a local bookstore's website using Seleni
 ## Blog Posts
 - [Python, Selenium, Slack, and GHA - Automating Book Availability Checks](https://k-candidate.github.io/2025/08/19/python-selenium-slack-automating-book-availability-checks.html)
 - [pyproject.toml - Automating Book Availability Checks](https://k-candidate.github.io/2025/08/23/pyproject-toml.html)
+- [Black, Isort, Mypy - Code Quality Checks - Automating Book Availability Checks](https://k-candidate.github.io/2025/08/24/black-isort-mypy-code-quality-checks.html)
 
 ## Usage
 
