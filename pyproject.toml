@@ -22,3 +22,39 @@ Repository = "https://github.com/k-candidate/selenium-book-search-slack-alerts"
 
 [project.scripts]
 book-search = "main:main"
+
+[project.optional-dependencies]
+dev = [
+  "black>=25.1.0",
+  "isort>=6.0.1",
+  "mypy>=1.17.1"
+]
+
+[tool.black]
+line-length = 79
+target-version = ["py313"]
+exclude = '''
+/(
+  \.git
+| \.mypy_cache
+| \.pytest_cache
+| \.venv
+| build
+| dist
+)/
+'''
+
+[tool.isort]
+profile = "black"
+line_length = 79
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+
+[tool.mypy]
+python_version = 3.13
+ignore_missing_imports = true
+strict = true
+warn_unused_configs = true
+exclude = "build"
