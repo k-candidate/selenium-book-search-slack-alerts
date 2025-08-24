@@ -2,6 +2,9 @@
 Automated script to search for books on a local bookstore's website using Selenium and send Slack alerts when books are found or errors occur.  
 "Local bookstore" = Physically near me. It will not work with any bookstore website.
 
+## Blog Posts
+- [Python, Selenium, Slack, and GHA - Automating Book Availability Checks](https://k-candidate.github.io/2025/08/19/python-selenium-slack-automating-book-availability-checks.html)
+
 ## Usage
 
 1. Install dependencies:
