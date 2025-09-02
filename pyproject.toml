@@ -26,7 +26,8 @@ book-search = "main:main"
 [project.optional-dependencies]
 dev = [
   "ruff>=0.12.11",
-  "mypy>=1.17.1"
+  "mypy>=1.17.1",
+  "pytest>=8.4.1",
 ]
 
 [tool.ruff]
@@ -38,7 +39,8 @@ exclude = [
   ".pytest_cache",
   ".venv",
   "build",
-  "dist"
+  "dist",
+  "tests"
 ]
 
 [tool.ruff.lint]
@@ -57,4 +59,7 @@ python_version = 3.13
 ignore_missing_imports = true
 strict = true
 warn_unused_configs = true
-exclude = "build"
+exclude = [
+  "build",
+  "tests"
+]
