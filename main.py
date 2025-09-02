@@ -43,7 +43,7 @@ def safe_send_keys(element: WebElement, keys: str, retries: int = 3) -> None:
     """Send keys to element retrying if StaleElementReferenceException occurs."""
     for i in range(retries):
         try:
-            element.send_keys(keyss)
+            element.send_keys(keys)
             return
         except StaleElementReferenceException:
             if i == retries - 1:
