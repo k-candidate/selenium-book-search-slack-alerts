@@ -39,7 +39,8 @@ exclude = [
   ".pytest_cache",
   ".venv",
   "build",
-  "dist"
+  "dist",
+  "tests"
 ]
 
 [tool.ruff.lint]
