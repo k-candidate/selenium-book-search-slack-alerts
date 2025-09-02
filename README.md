@@ -7,6 +7,8 @@ Automated script to search for books on a local bookstore's website using Seleni
 - [pyproject.toml - Automating Book Availability Checks](https://k-candidate.github.io/2025/08/23/pyproject-toml.html)
 - [Black, Isort, Mypy - Code Quality Checks - Automating Book Availability Checks](https://k-candidate.github.io/2025/08/24/black-isort-mypy-code-quality-checks.html)
 - [pylock.toml - PEP 751 - Automating Book Availability Checks](https://k-candidate.github.io/2025/08/25/pylock-toml-pep-751.html)
+- [Rustification of Python - uv, ruff, ty - Automating Book Availability Checks](https://k-candidate.github.io/2025/09/01/rustification-of-python-uv-ruff-ty.html)
+- [Unit Tests - Pytest - Automating Book Availability Checks](https://k-candidate.github.io/2025/09/02/unit-tests-pytest.html)
 
 ## Usage
 
