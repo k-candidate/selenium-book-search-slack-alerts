@@ -27,4 +27,4 @@ jobs:
       run: uv pip install pytest-github-actions-annotate-failures
 
     - name: Run unit tests
-      run: uv run pytest
+      run: uv run pytest tests/unit
