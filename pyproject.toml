@@ -63,3 +63,10 @@ exclude = [
   "build",
   "tests"
 ]
+
+[tool.pytest.ini_options]
+addopts = "--cov=main.py --cov-report=xml"
+testpaths = ["tests/unit"]
+
+[tool.coverage.report]
+fail_under = 80
