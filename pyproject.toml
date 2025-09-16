@@ -65,7 +65,7 @@ exclude = [
 ]
 
 [tool.pytest.ini_options]
-addopts = "--cov=main.py --cov-report=xml"
+addopts = "--cov=. --cov-report=xml"
 testpaths = ["tests/unit"]
 
 [tool.coverage.report]
