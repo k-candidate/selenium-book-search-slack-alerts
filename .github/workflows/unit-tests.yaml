@@ -24,7 +24,7 @@ jobs:
       run: uv sync --locked --all-extras
 
     - name: Install plugin
-      run: uv pip install pytest-github-actions-annotate-failures pytest-cov
+      run: uv pip install pytest-github-actions-annotate-failures
 
     - name: Run unit tests
       run: uv run pytest
