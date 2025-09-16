@@ -27,4 +27,7 @@ jobs:
       run: uv pip install pytest-github-actions-annotate-failures
 
     - name: Run unit tests
-      run: uv run pytest tests/unit
+      run: uv run pytest
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v5

@@ -1,8 +1,38 @@
-from unittest.mock import Mock
+from unittest.mock import Mock, patch
+
+import argparse
 
 import pytest
 
 import main
+
+
+@pytest.fixture
+def mock_args():
+    with patch('argparse.ArgumentParser.parse_args') as mock_parse_args:
+        yield mock_parse_args
+
+def test_parse_args_default(mock_args):
+    mock_args.return_value = argparse.Namespace(
+        book_list="Robinson Crusoe; Amin Maalouf; Dr. Seuss",
+        slack_webhook_url='http://dummy',
+        website_url='http://example.com'
+    )
+    args = main.parse_args()
+    assert args.book_list == "Robinson Crusoe; Amin Maalouf; Dr. Seuss"
+    assert args.slack_webhook_url == 'http://dummy'
+    assert args.website_url == 'http://example.com'
+
+def test_parse_args_custom_book_list(mock_args):
+    mock_args.return_value = argparse.Namespace(
+        book_list="Book A; Book B",
+        slack_webhook_url='http://dummy',
+        website_url='http://example.com'
+    )
+    args = main.parse_args()
+    assert args.book_list == "Book A; Book B"
+    assert args.slack_webhook_url == 'http://dummy'
+    assert args.website_url == 'http://example.com'
 
 
 def test_safe_send_keys_success():
