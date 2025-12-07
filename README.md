@@ -10,6 +10,7 @@ Automated script to search for books on a local bookstore's website using Seleni
 - [Rustification of Python - uv, ruff, ty - Automating Book Availability Checks](https://k-candidate.github.io/2025/09/01/rustification-of-python-uv-ruff-ty.html)
 - [Unit Tests - Pytest - Automating Book Availability Checks](https://k-candidate.github.io/2025/09/02/unit-tests-pytest.html)
 - [Code Coverage - Automating Book Availability Checks](https://k-candidate.github.io/2025/09/16/code-coverage.html)
+- [Tox - Automating Book Availability Checks](https://k-candidate.github.io/2025/12/06/tox.html)
 
 ## Usage
 
