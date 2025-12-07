@@ -9,7 +9,7 @@ description = "Automated script to search a local bookstore's website using Sele
 dependencies = [
   "selenium==4.35.0"
 ]
-requires-python = ">=3.13"
+requires-python = ">=3.11"
 authors = [
   { name = "k-candidate" }
 ]
@@ -29,6 +29,8 @@ dev = [
   "mypy>=1.17.1",
   "pytest>=8.4.1",
   "pytest-cov>=7.0.0",
+  "tox>=4.32.0",
+  "tox-uv>=1.29.0",
 ]
 
 [tool.ruff]
