@@ -34,4 +34,4 @@ jobs:
       run: uv sync --locked
 
     - name: Run Book Search Script
-      run: uv run python main.py --book-list "$BOOK_LIST" --slack-webhook-url "$SLACK_WEBHOOK_URL" --website-url "$WEBSITE_URL"
+      run: uv run python main.py --max-workers 4 --book-list "$BOOK_LIST" --slack-webhook-url "$SLACK_WEBHOOK_URL" --website-url "$WEBSITE_URL"
