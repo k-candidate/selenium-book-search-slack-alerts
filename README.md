@@ -11,21 +11,28 @@ Automated script to search for books on a local bookstore's website using Seleni
 - [Unit Tests - Pytest - Automating Book Availability Checks](https://k-candidate.github.io/2025/09/02/unit-tests-pytest.html)
 - [Code Coverage - Automating Book Availability Checks](https://k-candidate.github.io/2025/09/16/code-coverage.html)
 - [Tox - Automating Book Availability Checks](https://k-candidate.github.io/2025/12/06/tox.html)
+- [Multi-threading - Automating Book Availability Checks](https://k-candidate.github.io/2025/12/08/multi-threading.html)
 
 ## Usage
 
 1. Install dependencies:
 ```
-pip install -r requirements.txt
+# clone repo
+# cd repo
+# uv tool install tox --with tox-uv
+uv venv
+source .venv/bin/activate
+uv sync --locked --all-extras
 ```
 
 2. Run the script with the required arguments:
 ```
-python main.py --book-list "Sherlock Holmes; The snows of Kilimanjaro" --slack-webhook-url "https://hooks.slack.com/your/webhook" --website-url "https://my.local.bookstore"
+python main.py --max-workers 4 --book-list "Sherlock Holmes; The snows of Kilimanjaro" --slack-webhook-url "https://hooks.slack.com/your/webhook" --website-url "https://my.local.bookstore"
 ```
 
 ## CLI Arguments
 
+- `--max-workers`: Sunmber of threads to run in parallel
 - `--book-list`: Semicolon-separated list of book titles to search
 - `--slack-webhook-url`: Slack Incoming Webhook URL for sending notifications (required)
 - `--website-url`: Target website URL to search books on (required)
