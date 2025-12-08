@@ -1,4 +1,4 @@
-from unittest.mock import Mock, patch
+from unittest.mock import Mock, patch, MagicMock
 
 import argparse
 
@@ -16,7 +16,8 @@ def test_parse_args_default(mock_args):
     mock_args.return_value = argparse.Namespace(
         book_list="Robinson Crusoe; Amin Maalouf; Dr. Seuss",
         slack_webhook_url='http://dummy',
-        website_url='http://example.com'
+        website_url='http://example.com',
+        max_workers=2
     )
     args = main.parse_args()
     assert args.book_list == "Robinson Crusoe; Amin Maalouf; Dr. Seuss"
@@ -27,12 +28,14 @@ def test_parse_args_custom_book_list(mock_args):
     mock_args.return_value = argparse.Namespace(
         book_list="Book A; Book B",
         slack_webhook_url='http://dummy',
-        website_url='http://example.com'
+        website_url='http://example.com',
+        max_workers=3
     )
     args = main.parse_args()
     assert args.book_list == "Book A; Book B"
     assert args.slack_webhook_url == 'http://dummy'
     assert args.website_url == 'http://example.com'
+    assert args.max_workers == 3
 
 
 def test_safe_send_keys_success():
@@ -123,3 +126,29 @@ def test_send_slack_message_exception(monkeypatch, capsys):
     main.send_slack_message("http://dummy-url.com", "test")
     captured = capsys.readouterr()
     assert "Error sending message to Slack" in captured.out
+
+@patch('main.webdriver.Chrome')
+@patch('main.WebDriverWait')
+def test_check_single_book_available(mock_wait, mock_driver, monkeypatch):
+    # Mock driver setup
+    mock_driver_instance = MagicMock()
+    mock_driver.return_value.__enter__.return_value = mock_driver_instance
+    mock_driver_instance.get.return_value = None
+    
+    # Mock search elements
+    mock_search_bar = MagicMock()
+    mock_driver_instance.find_element.return_value = mock_search_bar
+    
+    # Mock wait conditions
+    mock_wait_instance = MagicMock()
+    mock_wait.return_value.__enter__.return_value = mock_wait_instance
+    mock_wait_instance.until.return_value = mock_search_bar
+    
+    # Mock products found
+    mock_driver_instance.find_elements.return_value = [MagicMock()]
+    
+    monkeypatch.setattr('main.send_slack_message', lambda *args: None)
+    
+    result = main.check_single_book("Test Book", 1, "http://slack", "http://site")
+    
+    assert result == {"index": 1, "book": "Test Book", "status": "available"}
