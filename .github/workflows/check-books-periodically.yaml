@@ -2,7 +2,7 @@ name: Check Books Availability and Notify via Slack
 
 on:
   schedule:
-    - cron: "0 6 * * *"  # Runs every day at 6:00am
+    - cron: "0 6 * * *" # Runs every day at 6:00am
   workflow_dispatch:
 
 env:
@@ -17,10 +17,16 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Install Chromium via snap
-      run: |
-        sudo snap install chromium --channel=stable
-        chromium --version
+    - name: Setup Chrome browser + Driver
+      id: chrome
+      uses: browser-actions/setup-chrome@v2
+      with:
+        chrome-version: stable
+        install-chromedriver: true
+
+    - run: |
+        ${{ steps.chrome.outputs.chrome-path }} --version
+        ${{ steps.chrome.outputs.chromedriver-path }} --version
 
     - name: Set up Python
       uses: actions/setup-python@v4
@@ -35,3 +41,6 @@ jobs:
 
     - name: Run Book Search Script
       run: uv run python main.py --max-workers 4 --book-list "$BOOK_LIST" --slack-webhook-url "$SLACK_WEBHOOK_URL" --website-url "$WEBSITE_URL"
+      env:
+        CHROME_EXECUTABLE_PATH: ${{ steps.chrome.outputs.chrome-path }}
+        CHROME_DRIVER_PATH: ${{ steps.chrome.outputs.chromedriver-path }}

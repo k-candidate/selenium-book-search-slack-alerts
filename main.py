@@ -1,5 +1,6 @@
 import argparse
 import json
+import os
 import time
 import urllib.request
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -95,7 +96,9 @@ def check_single_book(
     book: str, index: int, slack_webhook_url: str, website_url: str
 ) -> Dict[str, Any]:
     """Check availability for a single book using its own browser instance."""
-    chromedriver_path = "/snap/bin/chromium.chromedriver"
+    # Use GHA env vars, and fallback for local
+    chromedriver_path = os.environ.get('CHROME_DRIVER_PATH', '/snap/bin/chromium.chromedriver')
+    chrome_path = os.environ.get('CHROME_EXECUTABLE_PATH', None)
     service = Service(executable_path=chromedriver_path)
 
     options = Options()
@@ -103,6 +106,9 @@ def check_single_book(
     # options.add_experimental_option("detach", True)
     options.add_argument("--headless=new")
     options.add_argument("--window-size=1920,1080")
+    # Set browser binary if provided via env var in GHA. For local it is set via PATH.
+    if chrome_path:
+        options.binary_location = chrome_path
 
     driver = None
     try:
