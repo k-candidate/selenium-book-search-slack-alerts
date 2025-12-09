@@ -97,8 +97,10 @@ def check_single_book(
 ) -> Dict[str, Any]:
     """Check availability for a single book using its own browser instance."""
     # Use GHA env vars, and fallback for local
-    chromedriver_path = os.environ.get('CHROME_DRIVER_PATH', '/snap/bin/chromium.chromedriver')
-    chrome_path = os.environ.get('CHROME_EXECUTABLE_PATH', None)
+    chromedriver_path = os.environ.get(
+        "CHROME_DRIVER_PATH", "/snap/bin/chromium.chromedriver"
+    )
+    chrome_path = os.environ.get("CHROME_EXECUTABLE_PATH", None)
     service = Service(executable_path=chromedriver_path)
 
     options = Options()
