@@ -111,6 +111,11 @@ def check_single_book(
     # Set browser binary if provided via env var in GHA. For local it is set via PATH.
     if chrome_path:
         options.binary_location = chrome_path
+        options.add_argument("--no-sandbox")
+        options.add_argument("--disable-dev-shm-usage")
+        options.add_argument("--disable-gpu")
+        options.add_argument("--disable-extensions")
+        options.add_argument("--disable-plugins")
 
     driver = None
     try:
