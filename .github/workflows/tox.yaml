@@ -17,6 +17,7 @@ jobs:
           - "311"
           - "312" 
           - "313"
+          - "314"
 
     steps:
     - uses: actions/checkout@v6
@@ -28,7 +29,7 @@ jobs:
       run: uv tool install tox --with tox-uv --with tox-gh
       
     - name: Install Python (if needed)
-      if: matrix.env != '313'
+      if: matrix.env != '314'
       run: uv python install ${{ matrix.env }}
       
     - name: Setup test suite
