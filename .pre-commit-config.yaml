@@ -6,7 +6,7 @@ repos:
         name: "Ensure lock file is up-to-date"
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.14.11
+    rev: v0.14.13
     hooks:
       - id: ruff
         name: "Organize imports"
