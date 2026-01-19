@@ -7,7 +7,7 @@ name = "selenium-book-search-slack-alerts"
 version = "1.0.0"
 description = "Automated script to search a local bookstore's website using Selenium and send Slack alerts."
 dependencies = [
-  "selenium==4.39.0"
+  "selenium==4.40.0"
 ]
 requires-python = ">=3.11"
 authors = [
