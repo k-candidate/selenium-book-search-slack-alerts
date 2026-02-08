@@ -124,9 +124,11 @@ def check_single_book(
 
         # Wait for product results or no result message
         wait.until(
-            lambda d: d.find_elements(By.CSS_SELECTOR, "div.producto")
-            or d.find_elements(
-                By.CSS_SELECTOR, "span.sin-resultados-busqueda-avanzada"
+            lambda d: (
+                d.find_elements(By.CSS_SELECTOR, "div.producto")
+                or d.find_elements(
+                    By.CSS_SELECTOR, "span.sin-resultados-busqueda-avanzada"
+                )
             )
         )
 
