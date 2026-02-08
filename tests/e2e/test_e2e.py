@@ -15,7 +15,7 @@ def test_e2e_search_two_books_real_browser(monkeypatch: Any, capsys: Any) -> Non
             book_list="1984; dfvtvrbg",
             slack_webhook_url=os.environ.get("SLACK_WEBHOOK_URL", "http://dummy"),
             website_url=os.environ.get("WEBSITE_URL", "http://dummy-site"),
-            max_workers=1,
+            max_workers=2,
         )
 
     monkeypatch.setattr(main, "parse_args", real_parse_args)
@@ -24,6 +24,7 @@ def test_e2e_search_two_books_real_browser(monkeypatch: Any, capsys: Any) -> Non
     main.main()
 
     captured = capsys.readouterr()
+    print(f"\n=== TEST OUTPUT ===\n{captured.out}")
 
     # Verify expected statuses
     assert "Book #1 '1984': available" in captured.out
