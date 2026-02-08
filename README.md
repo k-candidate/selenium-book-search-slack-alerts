@@ -15,6 +15,7 @@ Automated script to search for books on a local bookstore's website using Seleni
 - [Further optimization - Automating Book Availability Checks](https://k-candidate.github.io/2025/12/09/chromium-installation-optimization.html)
 - [Renovate bot - Automating Book Availability Checks](https://k-candidate.github.io/2025/12/10/renovatebot.html)
 - [Shift Left and Reduce the Extraneous Cognitive Load with Git Pre-Commit Hooks - Automating Book Availability Checks](https://k-candidate.github.io/2026/01/11/git-pre-commit-hooks.html)
+- [Integration Tests - Automating Book Availability Checks](https://k-candidate.github.io/2026/03/01/integration-tests.html)
 
 ## Usage
 
