@@ -6,6 +6,8 @@ import argparse
 
 import pytest
 
+from selenium.common.exceptions import StaleElementReferenceException
+
 import main
 
 
@@ -50,8 +52,8 @@ def test_safe_send_keys_stale_retries() -> None:
     element = Mock()
     # Raise StaleElementReferenceException on first two calls, succeed on third
     element.send_keys.side_effect = [
-        main.StaleElementReferenceException,
-        main.StaleElementReferenceException,
+        StaleElementReferenceException,
+        StaleElementReferenceException,
         None,
     ]
     main.safe_send_keys(element, "test", retries=3)
@@ -60,8 +62,8 @@ def test_safe_send_keys_stale_retries() -> None:
 
 def test_safe_send_keys_stale_raises() -> None:
     element = Mock()
-    element.send_keys.side_effect = main.StaleElementReferenceException
-    with pytest.raises(main.StaleElementReferenceException):
+    element.send_keys.side_effect = StaleElementReferenceException
+    with pytest.raises(StaleElementReferenceException):
         main.safe_send_keys(element, "test", retries=2)
     assert element.send_keys.call_count == 2
 
@@ -77,8 +79,8 @@ def test_safe_clear_element_stale_retries() -> None:
     driver = Mock()
     element = Mock()
     driver.execute_script.side_effect = [
-        main.StaleElementReferenceException,
-        main.StaleElementReferenceException,
+        StaleElementReferenceException,
+        StaleElementReferenceException,
         None,
     ]
     main.safe_clear_element(driver, element, retries=3)
@@ -88,8 +90,8 @@ def test_safe_clear_element_stale_retries() -> None:
 def test_safe_clear_element_stale_raises() -> None:
     driver = Mock()
     element = Mock()
-    driver.execute_script.side_effect = main.StaleElementReferenceException
-    with pytest.raises(main.StaleElementReferenceException):
+    driver.execute_script.side_effect = StaleElementReferenceException
+    with pytest.raises(StaleElementReferenceException):
         main.safe_clear_element(driver, element, retries=2)
     assert driver.execute_script.call_count == 2
 

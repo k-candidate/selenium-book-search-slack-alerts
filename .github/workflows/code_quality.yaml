@@ -25,11 +25,14 @@ jobs:
       - name: Install dependencies and dev tools
         run: uv sync --locked --all-extras
 
+      - name: Ensure lock file is up-to-date
+        run: uv lock --check
+
       - name: Run ruff linting check
-        run: uv run ruff check .
+        run: uv run ruff check -v .
 
       - name: Run ruff formatting check
-        run: uv run ruff format --check .
+        run: uv run ruff format --check -v .
 
       - name: Run static type checks with mypy
         run: uv run mypy .

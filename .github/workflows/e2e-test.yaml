@@ -1,0 +1,40 @@
+name: Run e2e test
+
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+
+    env:
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      WEBSITE_URL: ${{ secrets.WEBSITE_URL }}
+
+    steps:
+    - uses: actions/checkout@v6
+
+    - name: Install Chromium via snap
+      run: |
+        sudo snap install chromium --channel=stable
+        chromium --version
+
+    - name: Set up Python
+      uses: actions/setup-python@v6
+      with:
+        python-version: "3.14"
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@v7
+
+    - name: Install dependencies and dev tools
+      run: uv sync --locked --all-extras
+
+    - name: Install pytest annotate plugin
+      run: uv pip install pytest-github-actions-annotate-failures
+
+    - name: Run e2e tests (no coverage)
+      run: uv run pytest --no-cov tests/e2e -v
