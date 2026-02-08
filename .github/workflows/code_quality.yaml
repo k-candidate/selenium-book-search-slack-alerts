@@ -26,7 +26,7 @@ jobs:
         run: uv sync --locked --all-extras
 
       - name: Ensure lock file is up-to-date
-        run: uv lock --check
+        run: uv lock --check -v
 
       - name: Run ruff linting check
         run: uv run ruff check -v .
