@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  test:
+  tox:
     name: test py${{ matrix.env }} 
     runs-on: ubuntu-latest
     strategy:

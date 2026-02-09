@@ -6,7 +6,7 @@ import argparse
 
 import pytest
 
-from selenium.common.exceptions import StaleElementReferenceException
+from selenium.common.exceptions import StaleElementReferenceException, TimeoutException
 
 import main
 
@@ -169,3 +169,99 @@ def test_check_single_book_available(
     result = main.check_single_book("Test Book", 1, "http://slack", "http://site")
 
     assert result == {"index": 1, "book": "Test Book", "status": "available"}
+
+
+
+def setup_common(monkeypatch: Any) -> None:
+    # Prevent any real Slack calls
+    monkeypatch.setattr("main.send_slack_message", lambda *args, **kwargs: None)
+
+
+@patch("main.webdriver.Chrome")
+@patch("main.WebDriverWait")
+def test_check_single_book_not_found(mock_wait: MagicMock, mock_chrome: MagicMock, monkeypatch: Any) -> None:
+    setup_common(monkeypatch)
+
+    driver = MagicMock()
+    mock_chrome.return_value = driver
+
+    # Wait returns a clickable element
+    mock_wait.return_value.until.return_value = MagicMock()
+
+    # First call to find_elements for products -> empty
+    # Second call for no_results -> list with a marker
+    def find_elements(css_selector: str) -> list[Any]:
+        if "div.producto" in css_selector:
+            return []
+        return [MagicMock()]
+
+    # args[1] is the selector string passed to find_elements
+    driver.find_elements.side_effect = lambda *args, **kwargs: find_elements(args[1])
+
+    res = main.check_single_book("Book X", 2, "http://slack", "http://site")
+    assert res["status"] == "not_found"
+
+
+@patch("main.webdriver.Chrome")
+@patch("main.WebDriverWait")
+def test_check_single_book_structure_changed(mock_wait: MagicMock, mock_chrome: MagicMock, monkeypatch: Any) -> None:
+    setup_common(monkeypatch)
+
+    driver = MagicMock()
+    mock_chrome.return_value = driver
+
+    mock_wait.return_value.until.return_value = MagicMock()
+
+    # No products and no no-results marker
+    driver.find_elements.return_value = []
+
+    res = main.check_single_book("Book Y", 3, "http://slack", "http://site")
+    assert res["status"] == "error"
+
+
+@patch("main.webdriver.Chrome")
+@patch("main.WebDriverWait")
+def test_check_single_book_timeout(mock_wait: MagicMock, mock_chrome: MagicMock, monkeypatch: Any) -> None:
+    setup_common(monkeypatch)
+
+    # Make wait.until raise TimeoutException
+    mock_wait.return_value.until.side_effect = TimeoutException
+
+    # Chrome will be created but won't get to results
+    mock_chrome.return_value = MagicMock()
+
+    res = main.check_single_book("Book Z", 4, "http://slack", "http://site")
+    assert res["status"] == "timeout"
+
+
+def test_check_single_book_stale_on_chrome(monkeypatch: Any) -> None:
+    setup_common(monkeypatch)
+
+    # Make webdriver.Chrome raise StaleElementReferenceException
+    monkeypatch.setattr("main.webdriver.Chrome", lambda *args, **kwargs: (_ for _ in ()).throw(StaleElementReferenceException()))
+
+    res = main.check_single_book("Book S", 5, "http://slack", "http://site")
+    assert res["status"] == "stale"
+
+
+def test_main_runs_with_patched_check(monkeypatch: Any, capsys: Any) -> None:
+    # Patch parse_args to control inputs
+    monkeypatch.setattr(
+        "argparse.ArgumentParser.parse_args",
+        lambda self=None: argparse.Namespace(
+            book_list="A;B",
+            slack_webhook_url="http://slack",
+            website_url="http://site",
+            max_workers=1,
+        ),
+    )
+
+    # Patch check_single_book to return predictable results
+    monkeypatch.setattr(
+        "main.check_single_book",
+        lambda book, index, slack, site: {"index": index, "book": book, "status": "available"},
+    )
+
+    main.main()
+    captured = capsys.readouterr()
+    assert "All searches completed!" in captured.out
