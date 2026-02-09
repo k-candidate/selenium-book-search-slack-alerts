@@ -3,10 +3,21 @@
   "extends": [
     "config:recommended"
   ],
+  "platformAutomerge": false,
+  "rebaseWhen": "behind-base-branch",
   "lockFileMaintenance": {
-    "enabled": true
+    "enabled": true,
+    "automerge": true,
+    "automergeType": "pr"
   },
   "pre-commit": {
     "enabled": true
-  }
+  },
+  "packageRules": [
+    {
+      "matchUpdateTypes": ["patch", "minor", "pin", "digest"],
+      "automerge": true,
+      "automergeType": "pr"
+    }
+  ]
 }
