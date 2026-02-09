@@ -20,4 +20,4 @@ jobs:
         node-version: '24'
 
     - name: Validate renovate configuration
-      run: npx --yes renovate-config-validator --strict renovate.json
+      run: npx --yes --package renovate renovate-config-validator --strict renovate.json
