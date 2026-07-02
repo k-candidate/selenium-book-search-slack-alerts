@@ -15,7 +15,7 @@ jobs:
       WEBSITE_URL: ${{ secrets.WEBSITE_URL }}
 
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
 
     - name: Install Chromium via snap
       run: |
