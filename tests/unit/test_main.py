@@ -172,6 +172,45 @@ def test_check_single_book_available(
 
 
 
+@patch("main.webdriver.Chrome")
+@patch("main.WebDriverWait")
+def test_check_single_book_uses_chrome_env_vars(
+    mock_wait: MagicMock,
+    mock_chrome: MagicMock,
+    monkeypatch: Any,
+) -> None:
+    monkeypatch.setenv("CHROME_EXECUTABLE_PATH", "/opt/google/chrome/chrome")
+    monkeypatch.setenv("CHROME_DRIVER_PATH", "/opt/chromedriver")
+    monkeypatch.setattr("main.time.sleep", lambda _: None)
+
+    driver = MagicMock()
+    mock_chrome.return_value = driver
+    mock_wait.return_value.until.return_value = MagicMock()
+
+    # No products, but the no-results marker is present.
+    def find_elements(*args: Any, **kwargs: Any) -> list[Any]:
+        if "div.producto" in args[1]:
+            return []
+        return [MagicMock()]
+
+    driver.find_elements.side_effect = find_elements
+
+    result = main.check_single_book("Book X", 2, "http://slack", "http://site")
+
+    assert result["status"] == "not_found"
+
+    options = mock_chrome.call_args.kwargs["options"]
+    assert options.binary_location == "/opt/google/chrome/chrome"
+    assert {
+        "--no-sandbox",
+        "--disable-dev-shm-usage",
+        "--disable-gpu",
+        "--disable-extensions",
+        "--disable-plugins",
+    }.issubset(options.arguments)
+
+
+
 def setup_common(monkeypatch: Any) -> None:
     # Prevent any real Slack calls
     monkeypatch.setattr("main.send_slack_message", lambda *args, **kwargs: None)
