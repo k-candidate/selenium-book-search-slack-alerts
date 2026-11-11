@@ -17,10 +17,16 @@ jobs:
     steps:
     - uses: actions/checkout@v7
 
-    - name: Install Chromium via snap
-      run: |
-        sudo snap install chromium --channel=stable
-        chromium --version
+    - name: Setup Chrome browser + Driver
+      id: chrome
+      uses: browser-actions/setup-chrome@v2
+      with:
+        chrome-version: stable
+        install-chromedriver: true
+
+    - run: |
+        ${{ steps.chrome.outputs.chrome-path }} --version
+        ${{ steps.chrome.outputs.chromedriver-path }} --version
 
     - name: Set up Python
       uses: actions/setup-python@v7
@@ -38,3 +44,6 @@ jobs:
 
     - name: Run e2e tests (no coverage)
       run: uv run pytest --no-cov tests/e2e -v -s
+      env:
+        CHROME_EXECUTABLE_PATH: ${{ steps.chrome.outputs.chrome-path }}
+        CHROME_DRIVER_PATH: ${{ steps.chrome.outputs.chromedriver-path }}
