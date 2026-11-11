@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  test:
+  tox:
     name: test py${{ matrix.env }} 
     runs-on: ubuntu-latest
     strategy:
@@ -17,18 +17,19 @@ jobs:
           - "311"
           - "312" 
           - "313"
+          - "314"
 
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
 
     - name: Install uv
-      uses: astral-sh/setup-uv@v6
+      uses: astral-sh/setup-uv@v10.3.3
 
     - name: Install tox + plugins
       run: uv tool install tox --with tox-uv --with tox-gh
       
     - name: Install Python (if needed)
-      if: matrix.env != '313'
+      if: matrix.env != '314'
       run: uv python install ${{ matrix.env }}
       
     - name: Setup test suite
