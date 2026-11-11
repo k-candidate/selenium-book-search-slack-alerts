@@ -44,3 +44,6 @@ jobs:
 
     - name: Run e2e tests (no coverage)
       run: uv run pytest --no-cov tests/e2e -v -s
+      env:
+        CHROME_EXECUTABLE_PATH: ${{ steps.chrome.outputs.chrome-path }}
+        CHROME_DRIVER_PATH: ${{ steps.chrome.outputs.chromedriver-path }}
